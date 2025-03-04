@@ -6,6 +6,7 @@ const price = Joi.number().integer().min(10);
 const description = Joi.string().min(10);
 const image = Joi.string().uri();
 const categoryId = Joi.number().integer();
+const discountId = Joi.number().integer(); // Agregamos el campo discountId
 
 const price_min = Joi.number().integer();
 const price_max = Joi.number().integer();
@@ -19,6 +20,7 @@ const createProductSchema = Joi.object({
   description: description.required(),
   image: image.required(),
   categoryId: categoryId.required(),
+  discountId: discountId.optional(),  // Lo añadimos como opcional
 });
 
 const updateProductSchema = Joi.object({
@@ -27,6 +29,7 @@ const updateProductSchema = Joi.object({
   description: description,
   image: image,
   categoryId: categoryId,
+  discountId: discountId.optional(),  // También lo añadimos en el update
 });
 
 const getProductSchema = Joi.object({
