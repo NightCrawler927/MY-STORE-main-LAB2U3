@@ -13,7 +13,7 @@ const price_max = Joi.number().integer();
 const limit = Joi.number().integer();
 const offset = Joi.number().integer();
 
-const discountId = Joi.number().integer(); // Definimos discountId como opcional
+const discount_id = Joi.number().integer(); // Definimos discountId como opcional
 
 const createProductSchema = Joi.object({
   name: name.required(),
@@ -21,7 +21,7 @@ const createProductSchema = Joi.object({
   description: description.required(),
   image: image.required(),
   categoryId: categoryId.required(),
-  discountId: discountId, // discountId opcional
+  discount_id: discount_id, // discountId opcional
 });
 
 const updateProductSchema = Joi.object({
@@ -30,7 +30,7 @@ const updateProductSchema = Joi.object({
   description: description,
   image: image,
   categoryId: categoryId,
-  discountId: discountId, // discountId opcional en actualización
+  discount_id: discount_id, // discountId opcional en actualización
 });
 
 const getProductSchema = Joi.object({
@@ -43,7 +43,7 @@ const queryProductSchema = Joi.object({
   price,
   price_min,
   price_max,
-  discountId: discountId, // discountId también opcional en consultas
+  discount_id: discount_id, // discountId también opcional en consultas
 });
 
 module.exports = {
