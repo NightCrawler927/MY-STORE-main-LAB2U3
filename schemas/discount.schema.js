@@ -1,54 +1,57 @@
 const Joi = require('joi');
 
 const id = Joi.number().integer();
-const name = Joi.string().min(3).max(15);
-const price = Joi.number().integer().min(10);
-const description = Joi.string().min(10);
-const image = Joi.string().uri();
-const categoryId = Joi.number().integer();
 
-const price_min = Joi.number().integer();
-const price_max = Joi.number().integer();
+const name = Joi.string().min(3).max(50);
+const percentage = Joi.number().integer().min(1).max(100);
+const start_date = Joi.date();
+const end_date = Joi.date();
+const status = Joi.boolean();
 
 const limit = Joi.number().integer();
 const offset = Joi.number().integer();
 
-const discount_id = Joi.number().integer(); // Definimos discountId como opcional
-
-const createProductSchema = Joi.object({
+const createDiscountSchema = Joi.object({
   name: name.required(),
-  price: price.required(),
-  description: description.required(),
-  image: image.required(),
-  categoryId: categoryId.required(),
-  discount_id: discount_id, // discountId opcional
+  percentage: percentage.required(),
+  start_date: start_date.required(),
+  end_date: end_date.required(),
+  status: status.default(true)
+}).custom((obj, helpers) => {
+  if (new Date(obj.start_date) >= new Date(obj.end_date)) {
+    return helpers.message('La fecha de inicio debe ser anterior a la fecha de fin');
+  }
+  return obj;
 });
 
-const updateProductSchema = Joi.object({
+const updateDiscountSchema = Joi.object({
   name: name,
-  price: price,
-  description: description,
-  image: image,
-  categoryId: categoryId,
-  discount_id: discount_id, // discountId opcional en actualización
+  percentage: percentage,
+  start_date: start_date,
+  end_date: end_date,
+  status: status
+}).custom((obj, helpers) => {
+  if (obj.start_date && obj.end_date) {
+    if (new Date(obj.start_date) >= new Date(obj.end_date)) {
+      return helpers.message('La fecha de inicio debe ser anterior a la fecha de fin');
+    }
+  }
+  return obj;
 });
 
-const getProductSchema = Joi.object({
+const getDiscountSchema = Joi.object({
   id: id.required(),
 });
 
-const queryProductSchema = Joi.object({
+const queryDiscountSchema = Joi.object({
   limit,
   offset,
-  price,
-  price_min,
-  price_max,
-  discount_id: discount_id, // discountId también opcional en consultas
+  status
 });
 
 module.exports = {
-  createProductSchema,
-  updateProductSchema,
-  getProductSchema,
-  queryProductSchema,
+  createDiscountSchema,
+  updateDiscountSchema,
+  getDiscountSchema,
+  queryDiscountSchema,
 };
